@@ -11,6 +11,17 @@ RSpec.describe PBRT::Builder do
     PBRT
   end
 
+  it "can build by chaining method calls" do
+    subject = described_class.new
+      .translate(1, 2, 3)
+      .shape.sphere(radius: 1)
+
+    expect(subject.to_s).to eq(<<~PBRT)
+      Translate 1 2 3
+      Shape "sphere" "float radius" [1]
+    PBRT
+  end
+
   it "can be provided with an io object" do
     io = StringIO.new
 

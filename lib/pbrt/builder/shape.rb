@@ -1,12 +1,12 @@
 module PBRT
   class Builder
     class Shape
-      def initialize(io)
-        @io = io
+      def initialize(builder)
+        @builder = builder
       end
 
-      def sphere(radius: nil)
-        @io.puts Statement.variadic("Shape", "sphere", ParameterList.from(
+      def sphere(params = {})
+        @builder.write Statement.variadic("Shape", "sphere", ParameterList.from(
           params,
 
           radius: :float,

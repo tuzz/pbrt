@@ -11,11 +11,16 @@ module PBRT
     end
 
     def translate(*args)
-      io.puts Statement.fixed_size("Translate", 3, args)
+      write Statement.fixed_size("Translate", 3, args)
     end
 
     def shape
-      Shape.new(io)
+      Shape.new(self)
+    end
+
+    def write(statement)
+      io.puts statement
+      self
     end
   end
 end
