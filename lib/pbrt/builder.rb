@@ -2,8 +2,10 @@ module PBRT
   class Builder
     attr_accessor :io
 
-    def initialize(io: StringIO.new)
+    def initialize(io: StringIO.new, &block)
       self.io = io
+
+      instance_eval &block if block_given?
     end
 
     def to_s
