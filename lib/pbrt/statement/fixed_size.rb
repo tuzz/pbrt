@@ -1,7 +1,7 @@
 module PBRT
   class Statement
     class FixedSize
-      def initialize(directive, expected, values)
+      def initialize(directive, expected, values = Values.new)
         @directive = directive
         @expected = expected
         @values = values
@@ -10,7 +10,7 @@ module PBRT
       end
 
       def to_s
-        "#@directive #@values"
+        @values.size.zero? ? @directive : "#@directive #@values"
       end
 
       private

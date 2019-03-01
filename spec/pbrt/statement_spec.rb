@@ -10,6 +10,9 @@ module PBRT
         it "concatenates the directive with its values" do
           subject = described_class.fixed_size("Translate", 3, Values.new(1, 2, 3))
           expect(subject.to_s).to eq("Translate 1 2 3")
+
+          subject = described_class.fixed_size("WorldBegin", 0)
+          expect(subject.to_s).to eq("WorldBegin")
         end
       end
     end
