@@ -6,11 +6,11 @@ module PBRT
       end
 
       def sphere(radius: nil)
-        parameter_list = ParameterList.new(
-          Parameter.new(:float, :radius) => Values.new(radius),
-        )
+        @io.puts Statement.variadic("Shape", "sphere", ParameterList.from(
+          params,
 
-        @io.puts Statement.variadic("Shape", "sphere", parameter_list)
+          radius: :float,
+        ))
       end
     end
   end
