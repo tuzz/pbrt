@@ -16,6 +16,10 @@ module PBRT
       Camera.new(self)
     end
 
+    def sampler
+      Sampler.new(self)
+    end
+
     def shape
       Shape.new(self)
     end

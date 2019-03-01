@@ -88,18 +88,66 @@ RSpec.describe PBRT::Builder do
           shutteropen: 1,
           shutterclose: 2,
           lensfile: "foo",
-          aperturediameter: 4,
-          focusdistance: 5,
+          aperturediameter: 3,
+          focusdistance: 4,
           simpleweighting: true,
         ), [
           'Camera "realistic"',
           '"float shutteropen" [1]',
           '"float shutterclose" [2]',
           '"string lensfile" ["foo"]',
-          '"float aperturediameter" [4]',
-          '"float focusdistance" [5]',
+          '"float aperturediameter" [3]',
+          '"float focusdistance" [4]',
           '"bool simpleweighting" ["true"]',
         ])
+    end
+  end
+
+  describe "samplers" do
+    # See: https://pbrt.org/fileformat-v3.html#samplers
+
+    specify do
+      check(subject.sampler.o2sequence(pixelsamples: 1), [
+        'Sampler "02sequence"',
+        '"integer pixelsamples" [1]',
+      ])
+    end
+
+    specify do
+      check(subject.sampler.halton(pixelsamples: 1), [
+        'Sampler "halton"',
+        '"integer pixelsamples" [1]',
+      ])
+    end
+
+    specify do
+      check(subject.sampler.maxmindist(pixelsamples: 1), [
+        'Sampler "maxmindist"',
+        '"integer pixelsamples" [1]',
+      ])
+    end
+
+    specify do
+      check(subject.sampler.random(pixelsamples: 1), [
+        'Sampler "random"',
+        '"integer pixelsamples" [1]',
+      ])
+    end
+
+    specify do
+      check(subject.sampler.sobol(pixelsamples: 1), [
+        'Sampler "sobol"',
+        '"integer pixelsamples" [1]',
+      ])
+    end
+
+    specify do
+      check(subject.sampler.stratified(jitter: true, xsamples: 1, ysamples: 2), [
+        'Sampler "stratified"',
+        '"bool jitter" ["true"]',
+        '"integer xsamples" [1]',
+        '"integer ysamples" [2]',
+      ])
     end
   end
 
