@@ -5,10 +5,14 @@ module PBRT
     end
 
     def to_s
-      formatted = @inner.map { |v| format(v) }
-
-      "[#{formatted.join(" ")}]"
+      @inner.map { |v| format(v) }.join(" ")
     end
+
+    def size
+      @inner.size
+    end
+
+    private
 
     def format(value)
       return '"true"' if value.is_a?(TrueClass)

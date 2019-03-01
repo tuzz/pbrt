@@ -6,7 +6,7 @@ module PBRT
 
     def to_s
       @name_value_pairs.map do |parameter, values|
-        [parameter.to_s, values.to_s].join(" ")
+        [parameter.to_s, "[#{values}]"].join(" ")
       end.join(" ")
     end
   end
