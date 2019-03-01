@@ -151,6 +151,32 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "film" do
+    # See: https://pbrt.org/fileformat-v3.html#film
+
+    specify do
+      check(
+        subject.film.image(
+          xresolution: 1,
+          yresolution: 2,
+          cropwindow: [3, 4, 5, 6],
+          scale: 7,
+          maxsampleluminance: 8,
+          diagonal: 9,
+          filename: "foo",
+        ), [
+          'Film "image"',
+          '"integer xresolution" [1]',
+          '"integer yresolution" [2]',
+          '"float cropwindow" [3 4 5 6]',
+          '"float scale" [7]',
+          '"float maxsampleluminance" [8]',
+          '"float diagonal" [9]',
+          '"string filename" ["foo"]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new

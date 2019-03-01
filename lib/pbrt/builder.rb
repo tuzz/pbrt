@@ -20,6 +20,10 @@ module PBRT
       Sampler.new(self)
     end
 
+    def film
+      Film.new(self)
+    end
+
     def shape
       Shape.new(self)
     end
