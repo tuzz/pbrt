@@ -1,10 +1,10 @@
 module PBRT
   class Statement
     class FixedSize
-      def initialize(directive, expected, values = Values.new)
+      def initialize(directive, expected, *args)
         @directive = directive
         @expected = expected
-        @values = values
+        @values = Values.new(*args)
 
         check_size
       end

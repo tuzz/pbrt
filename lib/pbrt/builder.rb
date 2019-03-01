@@ -11,7 +11,7 @@ module PBRT
     end
 
     def translate(*args)
-      io.puts Statement.fixed_size("Translate", 3, Values.new(args))
+      io.puts Statement.fixed_size("Translate", 3, args)
     end
 
     def shape
