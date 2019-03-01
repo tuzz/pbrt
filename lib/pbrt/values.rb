@@ -1,7 +1,7 @@
 module PBRT
   class Values
     def initialize(*inner)
-      @inner = inner
+      @inner = inner.flatten
     end
 
     def to_s
