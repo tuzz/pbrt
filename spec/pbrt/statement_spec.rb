@@ -18,7 +18,19 @@ module PBRT
     end
 
     describe ".variadic" do
-      # TODO
+      describe "#to_s" do
+        it "concatenates the directive with the kind (in quotes) and the parameter list" do
+          parameter_list = ParameterList.new(
+            Parameter.new(:string, "filename") => Values.new("simple.png"),
+            Parameter.new(:integer, "xresolution") => Values.new(800),
+          )
+
+          subject = described_class.variadic("Film", "image", parameter_list)
+          expect(subject.to_s).to eq(<<~PBRT.strip)
+            Film "image" "string filename" ["simple.png"] "integer xresolution" [800]
+          PBRT
+        end
+      end
     end
   end
 end
