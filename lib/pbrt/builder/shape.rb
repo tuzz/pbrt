@@ -6,11 +6,17 @@ module PBRT
       end
 
       def sphere(params = {})
-        @builder.write Statement.variadic("Shape", "sphere", ParameterList.from(
+        write Statement.variadic("Shape", "sphere", ParameterList.from(
           params,
 
           radius: :float,
         ))
+      end
+
+      private
+
+      def write(statement)
+        @builder.write(statement)
       end
     end
   end

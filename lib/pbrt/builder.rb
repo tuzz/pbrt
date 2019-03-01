@@ -12,6 +12,14 @@ module PBRT
       io.string
     end
 
+    def camera
+      Camera.new(self)
+    end
+
+    def shape
+      Shape.new(self)
+    end
+
     def identity
       write Statement.fixed_size("Identity", 0)
     end
@@ -54,10 +62,6 @@ module PBRT
 
     def active_transform(*args)
       write Statement.fixed_size("ActiveTransform", 1, args)
-    end
-
-    def shape
-      Shape.new(self)
     end
 
     def write(statement)

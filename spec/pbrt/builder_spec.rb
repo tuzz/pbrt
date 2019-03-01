@@ -1,6 +1,6 @@
 RSpec.describe PBRT::Builder do
-  def check(subject, expected)
-    expect(subject.to_s).to eq(expected + "\n")
+  def check(subject, *expected)
+    expect(subject.to_s).to eq(expected.join(" ") + "\n")
   end
 
   describe "transformations" do
@@ -17,6 +17,90 @@ RSpec.describe PBRT::Builder do
     specify { check(subject.concat_transform([1] * 16), "ConcatTransform 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1") }
     specify { check(subject.transform_times(1, 2), "TransformTimes 1 2") }
     specify { check(subject.active_transform(:StartTime), "ActiveTransform StartTime") }
+  end
+
+  describe "cameras" do
+    # See: https://pbrt.org/fileformat-v3.html#cameras
+
+    specify do
+      check(
+        subject.camera.environment(
+          shutteropen: 1,
+          shutterclose: 2,
+          frameaspectratio: 3,
+          screenwindow: 4,
+        ), [
+          'Camera "environment"',
+          '"float shutteropen" [1]',
+          '"float shutterclose" [2]',
+          '"float frameaspectratio" [3]',
+          '"float screenwindow" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.camera.orthographic(
+          shutteropen: 1,
+          shutterclose: 2,
+          frameaspectratio: 3,
+          screenwindow: 4,
+          lensradius: 5,
+          focaldistance: 6,
+        ), [
+          'Camera "orthographic"',
+          '"float shutteropen" [1]',
+          '"float shutterclose" [2]',
+          '"float frameaspectratio" [3]',
+          '"float screenwindow" [4]',
+          '"float lensradius" [5]',
+          '"float focaldistance" [6]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.camera.perspective(
+          shutteropen: 1,
+          shutterclose: 2,
+          frameaspectratio: 3,
+          screenwindow: 4,
+          lensradius: 5,
+          focaldistance: 6,
+          fov: 7,
+          halffov: 8,
+        ), [
+          'Camera "perspective"',
+          '"float shutteropen" [1]',
+          '"float shutterclose" [2]',
+          '"float frameaspectratio" [3]',
+          '"float screenwindow" [4]',
+          '"float lensradius" [5]',
+          '"float focaldistance" [6]',
+          '"float fov" [7]',
+          '"float halffov" [8]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.camera.realistic(
+          shutteropen: 1,
+          shutterclose: 2,
+          lensfile: "foo",
+          aperturediameter: 4,
+          focusdistance: 5,
+          simpleweighting: true,
+        ), [
+          'Camera "realistic"',
+          '"float shutteropen" [1]',
+          '"float shutterclose" [2]',
+          '"string lensfile" ["foo"]',
+          '"float aperturediameter" [4]',
+          '"float focusdistance" [5]',
+          '"bool simpleweighting" ["true"]',
+        ])
+    end
   end
 
   describe "ways to build" do
