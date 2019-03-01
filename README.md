@@ -9,3 +9,6 @@ This is a work in progress.
 ## Stretch goals:
 
 - size checks for parameter statements (e.g. float[4] cropwindow)
+- aliases:
+  - lowdiscrepancy -> o2sequence
+  - filter -> pixel_filter

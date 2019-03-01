@@ -177,6 +177,54 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "filters" do
+    # See: https://pbrt.org/fileformat-v3.html#filters
+
+    specify do
+      check(subject.pixel_filter.box(xwidth: 1, ywidth: 2), [
+        'PixelFilter "box"',
+        '"float xwidth" [1]',
+        '"float ywidth" [2]',
+      ])
+    end
+
+    specify do
+      check(subject.pixel_filter.gaussian(xwidth: 1, ywidth: 2, alpha: 3), [
+        'PixelFilter "gaussian"',
+        '"float xwidth" [1]',
+        '"float ywidth" [2]',
+        '"float alpha" [3]',
+      ])
+    end
+
+    specify do
+      check(subject.pixel_filter.mitchell(xwidth: 1, ywidth: 2, B: 3, C: 4), [
+        'PixelFilter "mitchell"',
+        '"float xwidth" [1]',
+        '"float ywidth" [2]',
+        '"float B" [3]',
+        '"float C" [4]',
+      ])
+    end
+
+    specify do
+      check(subject.pixel_filter.sinc(xwidth: 1, ywidth: 2, tau: 3), [
+        'PixelFilter "sinc"',
+        '"float xwidth" [1]',
+        '"float ywidth" [2]',
+        '"float tau" [3]',
+      ])
+    end
+
+    specify do
+      check(subject.pixel_filter.triangle(xwidth: 1, ywidth: 2), [
+        'PixelFilter "triangle"',
+        '"float xwidth" [1]',
+        '"float ywidth" [2]',
+      ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new

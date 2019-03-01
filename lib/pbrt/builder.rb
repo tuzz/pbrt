@@ -24,6 +24,10 @@ module PBRT
       Film.new(self)
     end
 
+    def pixel_filter
+      PixelFilter.new(self)
+    end
+
     def shape
       Shape.new(self)
     end
