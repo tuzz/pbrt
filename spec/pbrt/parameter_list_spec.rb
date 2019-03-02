@@ -18,6 +18,17 @@ module PBRT
         expect { described_class.from({ foo: 1 }, bar: :integer) }
           .to raise_error(ArgumentError, "(unknown keyword: foo)")
       end
+
+      context "when the type is a spectrum" do
+        it "sets the type from the value's representation" do
+          subject = described_class.from(
+            { foo: Spectrum.new(:rgb, 0.1, 0.2, 0.3) },
+            foo: :spectrum,
+          )
+
+          expect(subject.to_s).to eq('"rgb foo" [0.1 0.2 0.3]')
+        end
+      end
     end
 
     describe "#to_s" do

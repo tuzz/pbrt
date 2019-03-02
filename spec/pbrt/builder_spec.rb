@@ -19,6 +19,35 @@ RSpec.describe PBRT::Builder do
     specify { check(subject.include("foo/bar.pbrt"), 'Include "foo/bar.pbrt"') }
   end
 
+  describe "spectrums" do
+    # See: https://pbrt.org/fileformat-v3.html#parameter-lists
+
+    specify do
+      check(subject.light_source.infinite(L: subject.rgb(0.1, 0.2, 0.3)),
+        'LightSource "infinite" "rgb L" [0.1 0.2 0.3]')
+    end
+
+    specify do
+      check(subject.light_source.infinite(L: subject.xyz(0.1, 0.2, 0.3)),
+        'LightSource "infinite" "xyz L" [0.1 0.2 0.3]')
+    end
+
+    specify do
+      check(subject.light_source.infinite(L: subject.sampled(300, 0.3)),
+        'LightSource "infinite" "spectrum L" [300 0.3]')
+    end
+
+    specify do
+      check(subject.light_source.infinite(L: subject.sampled("filename")),
+        'LightSource "infinite" "spectrum L" ["filename"]')
+    end
+
+    specify do
+      check(subject.light_source.infinite(L: subject.blackbody(6500, 1)),
+        'LightSource "infinite" "blackbody L" [6500 1]')
+    end
+  end
+
   describe "transformations" do
     # See: https://pbrt.org/fileformat-v3.html#transformations
 
@@ -625,14 +654,14 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.light_source.distant(
-          scale: [1, 1, 1],    # TODO: add a spectrum type
-          L: [2, 2, 2],
+          scale: subject.rgb(1, 1, 1),
+          L: subject.xyz(2, 2, 2),
           from: [3, 3, 3],
           to: [4, 4, 4],
         ), [
           'LightSource "distant"',
-          '"spectrum scale" [1 1 1]',
-          '"spectrum L" [2 2 2]',
+          '"rgb scale" [1 1 1]',
+          '"xyz L" [2 2 2]',
           '"point3 from" [3 3 3]',
           '"point3 to" [4 4 4]',
         ])
@@ -641,13 +670,13 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.light_source.goniometric(
-          scale: [1, 1, 1],
-          I: [2, 2, 2],
+          scale: subject.rgb(1, 1, 1),
+          I: subject.xyz(2, 2, 2),
           mapname: "foo",
         ), [
           'LightSource "goniometric"',
-          '"spectrum scale" [1 1 1]',
-          '"spectrum I" [2 2 2]',
+          '"rgb scale" [1 1 1]',
+          '"xyz I" [2 2 2]',
           '"string mapname" ["foo"]',
         ])
     end
@@ -655,14 +684,14 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.light_source.infinite(
-          scale: [1, 1, 1],
-          L: [2, 2, 2],
+          scale: subject.rgb(1, 1, 1),
+          L: subject.xyz(2, 2, 2),
           samples: 3,
           mapname: "foo",
         ), [
           'LightSource "infinite"',
-          '"spectrum scale" [1 1 1]',
-          '"spectrum L" [2 2 2]',
+          '"rgb scale" [1 1 1]',
+          '"xyz L" [2 2 2]',
           '"integer samples" [3]',
           '"string mapname" ["foo"]',
         ])
@@ -671,13 +700,13 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.light_source.point(
-          scale: [1, 1, 1],
-          I: [2, 2, 2],
+          scale: subject.rgb(1, 1, 1),
+          I: subject.xyz(2, 2, 2),
           from: [3, 3, 3],
         ), [
           'LightSource "point"',
-          '"spectrum scale" [1 1 1]',
-          '"spectrum I" [2 2 2]',
+          '"rgb scale" [1 1 1]',
+          '"xyz I" [2 2 2]',
           '"point3 from" [3 3 3]',
         ])
     end
@@ -685,14 +714,14 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.light_source.projection(
-          scale: [1, 1, 1],
-          I: [2, 2, 2],
+          scale: subject.rgb(1, 1, 1),
+          I: subject.xyz(2, 2, 2),
           fov: 3,
           mapname: "foo",
         ), [
           'LightSource "projection"',
-          '"spectrum scale" [1 1 1]',
-          '"spectrum I" [2 2 2]',
+          '"rgb scale" [1 1 1]',
+          '"xyz I" [2 2 2]',
           '"float fov" [3]',
           '"string mapname" ["foo"]',
         ])
@@ -701,16 +730,16 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.light_source.spot(
-          scale: [1, 1, 1],
-          I: [2, 2, 2],
+          scale: subject.rgb(1, 1, 1),
+          I: subject.xyz(2, 2, 2),
           from: [3, 3, 3],
           to: [4, 4, 4],
           coneangle: 5,
           conedeltaangle: 6,
         ), [
           'LightSource "spot"',
-          '"spectrum scale" [1 1 1]',
-          '"spectrum I" [2 2 2]',
+          '"rgb scale" [1 1 1]',
+          '"xyz I" [2 2 2]',
           '"point3 from" [3 3 3]',
           '"point3 to" [4 4 4]',
           '"float coneangle" [5]',
@@ -725,12 +754,12 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.area_light_source.diffuse(
-          L: [1, 1, 1],
+          L: subject.rgb(1, 1, 1),
           twosided: true,
           samples: 2,
         ), [
           'AreaLightSource "diffuse"',
-          '"spectrum L" [1 1 1]',
+          '"rgb L" [1 1 1]',
           '"bool twosided" ["true"]',
           '"integer samples" [2]',
         ])

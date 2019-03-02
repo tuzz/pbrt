@@ -4,7 +4,10 @@ module PBRT
       Signature.new(*type_signature.keys).check(params)
 
       pairs = params.map do |name, value|
-        [Parameter.new(type_signature[name], name), Values.new(value)]
+        type = type_signature[name]
+        type, value = Spectrum.unpack(value) if type == :spectrum
+
+        [Parameter.new(type, name), Values.new(value)]
       end
 
       new(pairs.to_h)

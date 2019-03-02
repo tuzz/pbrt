@@ -122,6 +122,26 @@ module PBRT
       write Statement.fixed_size("Include", 1, args)
     end
 
+    def rgb(*args)
+      Spectrum.new(:rgb, *args)
+    end
+
+    def color(*args)
+      Spectrum.new(:color, *args)
+    end
+
+    def xyz(*args)
+      Spectrum.new(:xyz, *args)
+    end
+
+    def sampled(*args)
+      Spectrum.new(:spectrum, *args)
+    end
+
+    def blackbody(*args)
+      Spectrum.new(:blackbody, *args)
+    end
+
     def write(statement)
       io.puts statement
       self
