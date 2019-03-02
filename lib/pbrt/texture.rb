@@ -47,7 +47,7 @@ module PBRT
     def self.raise_ambiguous_error(value)
       message = "Please specify whether #{value.inspect} is a spectrum or texture.\n"
       message += "If it's a texture, wrap it with: texture(#{value.inspect})\n"
-      message += "If it's a spectrum, wrap it with a representation: rgb(#{value.inspect})\n"
+      message += "If it's a spectrum, wrap it with its representation: sampled(#{value.inspect})\n"
       message += "Valid representations are: rgb, xyz, sampled and blackbody"
 
       raise AmbiguousArgumentError, message
