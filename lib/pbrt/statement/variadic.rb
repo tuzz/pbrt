@@ -8,7 +8,7 @@ module PBRT
       end
 
       def to_s
-        %(#@directive "#@kind" #@parameter_list)
+        %(#@directive "#@kind" #@parameter_list).strip
       end
     end
   end

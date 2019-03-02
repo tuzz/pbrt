@@ -1,5 +1,5 @@
 RSpec.describe PBRT do
-  xit "can generate the example pbrt file" do
+  it "can generate the example pbrt file" do
     # From: https://pbrt.org/fileformat-v3.html#example
 
     builder = PBRT::Builder.new do
@@ -23,8 +23,14 @@ RSpec.describe PBRT do
         end
 
         attribute_begin do
-          # TODO: figure out how to represent textures
-          material.matte(Kd: "checks")
+          texture("checks").spectrum.checkerboard(
+            uscale: [8],
+            vscale: [8],
+            tex1: rgb(0.1, 0.1, 0.1),
+            tex2: rgb(0.8, 0.8, 0.8),
+          )
+
+          material.matte(Kd: texture("checks"))
           translate(0, 0, -1)
 
           shape.trianglemesh(
@@ -36,43 +42,33 @@ RSpec.describe PBRT do
       end
     end
 
-    expect(builder.to_s).to eq(<<~PBRT)
-      LookAt 3 4 1.5  # eye
-             .5 .5 0  # look at point
-             0 0 1    # up vector
-      Camera "perspective" "float fov" 45
+    # This is a copy of the example, with a few minor cosmetic changes, e.g.
+    # - one line per statement
+    # - wrap some values in []
+    # - point -> point3
+    # - add leading 0 to floats
 
-      Sampler "halton" "integer pixelsamples" 128
+    expect(builder.to_s.lines).to eq(<<~PBRT.lines)
+      LookAt 3 4 1.5 0.5 0.5 0 0 0 1
+      Camera "perspective" "float fov" [45]
+      Sampler "halton" "integer pixelsamples" [128]
       Integrator "path"
-      Film "image" "string filename" "simple.png"
-           "integer xresolution" [400] "integer yresolution" [400]
-
+      Film "image" "string filename" ["simple.png"] "integer xresolution" [400] "integer yresolution" [400]
       WorldBegin
-
       # uniform blue-ish illumination from all directions
-      LightSource "infinite" "rgb L" [.4 .45 .5]
-
+      LightSource "infinite" "rgb L" [0.4 0.45 0.5]
       # approximate the sun
-      LightSource "distant"  "point from" [ -30 40  100 ]
-         "blackbody L" [3000 1.5]
-
+      LightSource "distant" "point3 from" [-30 40 100] "blackbody L" [3000 1.5]
       AttributeBegin
-        Material "glass"
-        Shape "sphere" "float radius" 1
+      Material "glass"
+      Shape "sphere" "float radius" [1]
       AttributeEnd
-
       AttributeBegin
-        Texture "checks" "spectrum" "checkerboard"
-                "float uscale" [8] "float vscale" [8]
-                "rgb tex1" [.1 .1 .1] "rgb tex2" [.8 .8 .8]
-        Material "matte" "texture Kd" "checks"
-        Translate 0 0 -1
-        Shape "trianglemesh"
-            "integer indices" [0 1 2 0 2 3]
-            "point P" [ -20 -20 0   20 -20 0   20 20 0   -20 20 0 ]
-            "float st" [ 0 0   1 0    1 1   0 1 ]
+      Texture "checks" "spectrum" "checkerboard" "float uscale" [8] "float vscale" [8] "rgb tex1" [0.1 0.1 0.1] "rgb tex2" [0.8 0.8 0.8]
+      Material "matte" "texture Kd" ["checks"]
+      Translate 0 0 -1
+      Shape "trianglemesh" "integer indices" [0 1 2 0 2 3] "point3 P" [-20 -20 0 20 -20 0 20 20 0 -20 20 0] "float st" [0 0 1 0 1 1 0 1]
       AttributeEnd
-
       WorldEnd
     PBRT
   end
