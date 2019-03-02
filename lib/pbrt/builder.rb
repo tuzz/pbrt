@@ -96,6 +96,12 @@ module PBRT
       write Statement.fixed_size("ReverseOrientation", 0)
     end
 
+    def world_begin(&block)
+      write Statement.fixed_size("WorldBegin", 0)
+      instance_eval &block
+      write Statement.fixed_size("WorldEnd", 0)
+    end
+
     def attribute_begin(&block)
       write Statement.fixed_size("AttributeBegin", 0)
       instance_eval &block
@@ -106,6 +112,14 @@ module PBRT
       write Statement.fixed_size("TransformBegin", 0)
       instance_eval &block
       write Statement.fixed_size("TransformEnd", 0)
+    end
+
+    def comment(string)
+      string.split("\n").map { |s| "# #{s}\n" }.join
+    end
+
+    def include(args)
+      write Statement.fixed_size("Include", 1, args)
     end
 
     def write(statement)

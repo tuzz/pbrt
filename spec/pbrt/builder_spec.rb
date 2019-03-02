@@ -3,6 +3,22 @@ RSpec.describe PBRT::Builder do
     expect(subject.to_s).to eq(expected.join(" ") + "\n")
   end
 
+  describe "general structure" do
+    # See: https://pbrt.org/fileformat-v3.html#general-structure
+
+    specify do
+      check(subject.world_begin { translate(1, 2, 3) }, <<~PBRT.strip)
+        WorldBegin
+        Translate 1 2 3
+        WorldEnd
+      PBRT
+    end
+
+    specify { check(subject.comment("foo bar"), "# foo bar") }
+    specify { check(subject.comment("foo\nbar"), "# foo\n# bar") }
+    specify { check(subject.include("foo/bar.pbrt"), 'Include "foo/bar.pbrt"') }
+  end
+
   describe "transformations" do
     # See: https://pbrt.org/fileformat-v3.html#transformations
 
