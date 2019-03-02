@@ -225,6 +225,110 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "integrators" do
+    # See: https://pbrt.org/fileformat-v3.html#integrators
+
+    specify do
+      check(
+        subject.integrator.bdpt(
+          maxdepth: 1,
+          pixelbounds: 2,
+          lightsamplestrategy: "foo",
+          visualizestrategies: true,
+          visualizeweights: false,
+        ), [
+          'Integrator "bdpt"',
+          '"integer maxdepth" [1]',
+          '"integer pixelbounds" [2]',
+          '"string lightsamplestrategy" ["foo"]',
+          '"bool visualizestrategies" ["true"]',
+          '"bool visualizeweights" ["false"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.integrator.directlighting(
+          strategy: "foo",
+          maxdepth: 1,
+          pixelbounds: 2,
+        ), [
+          'Integrator "directlighting"',
+          '"string strategy" ["foo"]',
+          '"integer maxdepth" [1]',
+          '"integer pixelbounds" [2]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.integrator.mlt(
+          maxdepth: 1,
+          bootstrapsamples: 2,
+          chains: 3,
+          mutationsperpixel: 4,
+          largestepprobability: 5,
+          sigma: 6,
+        ), [
+          'Integrator "mlt"',
+          '"integer maxdepth" [1]',
+          '"integer bootstrapsamples" [2]',
+          '"integer chains" [3]',
+          '"integer mutationsperpixel" [4]',
+          '"float largestepprobability" [5]',
+          '"float sigma" [6]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.integrator.path(
+          maxdepth: 1,
+          pixelbounds: 2,
+          rrthreshold: 3,
+          lightsamplestrategy: "foo",
+        ), [
+          'Integrator "path"',
+          '"integer maxdepth" [1]',
+          '"integer pixelbounds" [2]',
+          '"float rrthreshold" [3]',
+          '"string lightsamplestrategy" ["foo"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.integrator.sppm(
+          maxdepth: 1,
+          iterations: 2,
+          photonsperiteration: 3,
+          imagewritefrequency: 4,
+          radius: 5,
+        ), [
+          'Integrator "sppm"',
+          '"integer maxdepth" [1]',
+          '"integer iterations" [2]',
+          '"integer photonsperiteration" [3]',
+          '"integer imagewritefrequency" [4]',
+          '"float radius" [5]',
+        ])
+    end
+
+    # At time of writing, the parameters for the WhittedIntegrator aren't listed.
+    # https://github.com/mmp/pbrt-v3/blob/f7653953b2f9cc5d6a53b46acb5ce03317fd3e8b/src/integrators/whitted.cpp#L92-L94
+    specify do
+      check(
+        subject.integrator.whitted(
+          maxdepth: 1,
+          pixelbounds: 2,
+        ), [
+          'Integrator "whitted"',
+          '"integer maxdepth" [1]',
+          '"integer pixelbounds" [2]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new

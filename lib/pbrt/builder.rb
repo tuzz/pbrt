@@ -28,6 +28,10 @@ module PBRT
       PixelFilter.new(self)
     end
 
+    def integrator
+      Integrator.new(self)
+    end
+
     def shape
       Shape.new(self)
     end
