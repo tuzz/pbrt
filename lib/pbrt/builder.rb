@@ -141,7 +141,7 @@ module PBRT
     end
 
     def comment(string)
-      string.split("\n").map { |s| "# #{s}\n" }.join
+      write string.split("\n").map { |s| "# #{s}\n" }.join
     end
 
     def include(args)
