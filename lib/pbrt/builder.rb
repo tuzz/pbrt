@@ -165,7 +165,7 @@ module PBRT
     end
 
     def texture(*args)
-      Texture.new(*args)
+      PBRT::Texture.new(self, *args)
     end
 
     def write(statement)

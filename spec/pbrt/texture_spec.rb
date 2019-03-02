@@ -2,7 +2,7 @@ module PBRT
   RSpec.describe Texture do
     describe ".unpack" do
       it "unpacks the texture's type and value" do
-        subject = described_class.new("foo")
+        subject = described_class.new(nil, "foo")
         type, value = described_class.unpack(:texture, subject)
 
         expect(type).to eq(:texture)

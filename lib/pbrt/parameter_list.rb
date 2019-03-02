@@ -7,7 +7,10 @@ module PBRT
         type = type_signature[name]
 
         type, value = Texture.unpack(type, value)
-        type, value = Spectrum.unpack(value) if type == :spectrum
+
+        if type == :spectrum || value.is_a?(Spectrum)
+          type, value = Spectrum.unpack(value)
+        end
 
         [Parameter.new(type, name), Values.new(value)]
       end

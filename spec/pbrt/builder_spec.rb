@@ -1127,6 +1127,237 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "textures" do
+    # See: https://pbrt.org/fileformat-v3.html#textures
+
+    specify do
+      check(
+        subject.texture("name").spectrum.bilerp(
+          mapping: "foo",
+          uscale: 1,
+          vscale: 2,
+          udelta: 3,
+          vdelta: 4,
+          v1: [5, 5, 5],
+          v2: [6, 6, 6],
+          v00: 7,
+          v01: subject.xyz(8, 8, 8),
+          v10: subject.texture("bar"),
+          v11: 9,
+        ), [
+          'Texture "name" "spectrum" "bilerp"',
+          '"string mapping" ["foo"]',
+          '"float uscale" [1]',
+          '"float vscale" [2]',
+          '"float udelta" [3]',
+          '"float vdelta" [4]',
+          '"vector3 v1" [5 5 5]',
+          '"vector3 v2" [6 6 6]',
+          '"float v00" [7]',
+          '"xyz v01" [8 8 8]',
+          '"texture v10" ["bar"]',
+          '"float v11" [9]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").float.checkerboard(
+          mapping: "foo",
+          uscale: 1,
+          vscale: 2,
+          udelta: 3,
+          vdelta: 4,
+          v1: [5, 5, 5],
+          v2: [6, 6, 6],
+          dimension: 7,
+          tex1: subject.rgb(8, 8, 8),
+          tex2: subject.texture("bar"),
+          aamode: "baz",
+        ), [
+          'Texture "name" "float" "checkerboard"',
+          '"string mapping" ["foo"]',
+          '"float uscale" [1]',
+          '"float vscale" [2]',
+          '"float udelta" [3]',
+          '"float vdelta" [4]',
+          '"vector3 v1" [5 5 5]',
+          '"vector3 v2" [6 6 6]',
+          '"integer dimension" [7]',
+          '"rgb tex1" [8 8 8]',
+          '"texture tex2" ["bar"]',
+          '"string aamode" ["baz"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").spectrum.constant(
+          value: subject.rgb(1, 1, 1),
+        ), [
+          'Texture "name" "spectrum" "constant"',
+          '"rgb value" [1 1 1]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").float.dots(
+          mapping: "foo",
+          uscale: 1,
+          vscale: 2,
+          udelta: 3,
+          vdelta: 4,
+          v1: [5, 5, 5],
+          v2: [6, 6, 6],
+          inside: 7,
+          outside: subject.texture("bar"),
+        ), [
+          'Texture "name" "float" "dots"',
+          '"string mapping" ["foo"]',
+          '"float uscale" [1]',
+          '"float vscale" [2]',
+          '"float udelta" [3]',
+          '"float vdelta" [4]',
+          '"vector3 v1" [5 5 5]',
+          '"vector3 v2" [6 6 6]',
+          '"float inside" [7]',
+          '"texture outside" ["bar"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").spectrum.fbm(
+          octaves: 1,
+          roughness: 2,
+        ), [
+          'Texture "name" "spectrum" "fbm"',
+          '"integer octaves" [1]',
+          '"float roughness" [2]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").float.imagemap(
+          mapping: "foo",
+          uscale: 1,
+          vscale: 2,
+          udelta: 3,
+          vdelta: 4,
+          v1: [5, 5, 5],
+          v2: [6, 6, 6],
+          filename: "bar",
+          wrap: "baz",
+          maxanisotropy: 7,
+          trilinear: true,
+          scale: 8,
+          gamma: false,
+        ), [
+          'Texture "name" "float" "imagemap"',
+          '"string mapping" ["foo"]',
+          '"float uscale" [1]',
+          '"float vscale" [2]',
+          '"float udelta" [3]',
+          '"float vdelta" [4]',
+          '"vector3 v1" [5 5 5]',
+          '"vector3 v2" [6 6 6]',
+          '"string filename" ["bar"]',
+          '"string wrap" ["baz"]',
+          '"float maxanisotropy" [7]',
+          '"bool trilinear" ["true"]',
+          '"float scale" [8]',
+          '"bool gamma" ["false"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").spectrum.marble(
+          octaves: 1,
+          roughness: 2,
+          scale: 3,
+          variation: 4,
+        ), [
+          'Texture "name" "spectrum" "marble"',
+          '"integer octaves" [1]',
+          '"float roughness" [2]',
+          '"float scale" [3]',
+          '"float variation" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").float.mix(
+          tex1: subject.texture("foo"),
+          tex2: 1,
+          amount: subject.sampled(2, 2, 2)
+        ), [
+          'Texture "name" "float" "mix"',
+          '"texture tex1" ["foo"]',
+          '"float tex2" [1]',
+          '"spectrum amount" [2 2 2]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").spectrum.scale(
+          tex1: subject.texture("foo"),
+          tex2: 1,
+        ), [
+          'Texture "name" "spectrum" "scale"',
+          '"texture tex1" ["foo"]',
+          '"float tex2" [1]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.texture("name").float.uv(
+          mapping: "foo",
+          uscale: 1,
+          vscale: 2,
+          udelta: 3,
+          vdelta: 4,
+          v1: [5, 5, 5],
+          v2: [6, 6, 6],
+        ), [
+          'Texture "name" "float" "uv"',
+          '"string mapping" ["foo"]',
+          '"float uscale" [1]',
+          '"float vscale" [2]',
+          '"float udelta" [3]',
+          '"float vdelta" [4]',
+          '"vector3 v1" [5 5 5]',
+          '"vector3 v2" [6 6 6]',
+        ])
+    end
+
+    # At time of writing, the parameters for the WindyTexture aren't listed.
+    # Having looked at the source code, I don't think there are any.
+    specify do
+      check(
+        subject.texture("name").spectrum.windy,
+        'Texture "name" "spectrum" "windy" ',
+      )
+    end
+
+    specify do
+      check(
+        subject.texture("name").float.wrinkled(
+          octaves: 1,
+          roughness: 2,
+        ), [
+          'Texture "name" "float" "wrinkled"',
+          '"integer octaves" [1]',
+          '"float roughness" [2]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new

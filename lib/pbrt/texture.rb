@@ -1,9 +1,28 @@
+# This class does double duty as both a means of wrapping parameter
+# values to disambiguate them from floats/spectrums, but it's also
+# the interface for the builder to write Texture directives.
+
 module PBRT
   class Texture
     attr_reader :args
 
-    def initialize(*args)
+    def initialize(builder, *args)
+      @builder = builder
       @args = args
+    end
+
+    # If these three methods are called, it means the user is trying
+    # to write a Texture directive, so delegate to that builder.
+    def spectrum
+      PBRT::Builder::Texture.new(@builder, args.first, "spectrum")
+    end
+
+    def color
+      PBRT::Builder::Texture.new(@builder, args.first, "color")
+    end
+
+    def float
+      PBRT::Builder::Texture.new(@builder, args.first, "float")
     end
 
     def self.unpack(type, value)

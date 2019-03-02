@@ -32,7 +32,7 @@ module PBRT
 
       context "when the type is a float_texture" do
         it "sets the type to texture if the value is wrapped" do
-          subject = described_class.from({ foo: Texture.new("name") }, foo: :float_texture)
+          subject = described_class.from({ foo: Texture.new(nil, "name") }, foo: :float_texture)
           expect(subject.to_s).to eq('"texture foo" ["name"]')
         end
 
@@ -47,7 +47,7 @@ module PBRT
 
       context "when the type is a spectrum_texture" do
         it "sets the type to texture if the value is wrapped" do
-          subject = described_class.from({ foo: Texture.new("name") }, foo: :spectrum_texture)
+          subject = described_class.from({ foo: Texture.new(nil, "name") }, foo: :spectrum_texture)
           expect(subject.to_s).to eq('"texture foo" ["name"]')
         end
 
@@ -64,7 +64,7 @@ module PBRT
 
       context "when the type is a texture" do
         it "sets the type to texture if the value is wrapped" do
-          subject = described_class.from({ foo: Texture.new("name") }, foo: :texture)
+          subject = described_class.from({ foo: Texture.new(nil, "name") }, foo: :texture)
           expect(subject.to_s).to eq('"texture foo" ["name"]')
         end
 
