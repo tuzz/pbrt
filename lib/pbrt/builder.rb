@@ -32,6 +32,10 @@ module PBRT
       Integrator.new(self)
     end
 
+    def accelerator
+      Accelerator.new(self)
+    end
+
     def shape
       Shape.new(self)
     end

@@ -329,6 +329,40 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "accelerators" do
+    # See: https://pbrt.org/fileformat-v3.html#accelerators
+
+    specify do
+      check(
+        subject.accelerator.bvh(
+          maxnodeprims: 1,
+          splitmethod: "foo",
+        ), [
+          'Accelerator "bvh"',
+          '"integer maxnodeprims" [1]',
+          '"string splitmethod" ["foo"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.accelerator.kdtree(
+          intersectcost: 1,
+          traversalcost: 2,
+          emptybonus: 3,
+          maxprims: 4,
+          maxdepth: 5,
+        ), [
+          'Accelerator "kdtree"',
+          '"integer intersectcost" [1]',
+          '"integer traversalcost" [2]',
+          '"float emptybonus" [3]',
+          '"integer maxprims" [4]',
+          '"integer maxdepth" [5]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new
