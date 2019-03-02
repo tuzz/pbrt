@@ -214,6 +214,53 @@ module PBRT
       def write(statement)
         @builder.write(statement)
       end
+
+      ALL_PARAMS = {
+          Kd: :spectrum_texture,
+          Kr: :spectrum_texture,
+          Ks: :spectrum_texture,
+          Kt: :spectrum_texture,
+          alpha: :float_texture,
+          amount: :spectrum_texture,
+          anisotropic: :float_texture,
+          beta_m: :float_texture,
+          beta_n: :float_texture,
+          bsdffile: :string,
+          bumpmap: :float_texture,
+          clearcoat: :float_texture,
+          clearcoatgloss: :float_texture,
+          color: :spectrum_texture,
+          difftrans: :spectrum_texture,
+          eumelanin: :float_texture,
+          flatness: :spectrum_texture,
+          k: :spectrum_texture,
+          metallic: :float_texture,
+          mfp: :float_texture,
+          name: :string,
+          namedmaterial1: :string,
+          namedmaterial2: :string,
+          opacity: :spectrum_texture,
+          pheomelanin: :float_texture,
+          reflect: :spectrum_texture,
+          remaproughness: :bool,
+          roughness: :float_texture,
+          scale: :float,
+          scatterdistance: :spectrum_texture,
+          sheen: :float_texture,
+          sheentint: :float_texture,
+          sigma: :float_texture,
+          sigma_a: :spectrum_texture,
+          sigma_prime_s: :spectrum_texture,
+          spectrans: :float_texture,
+          speculartint: :float_texture,
+          thin: :bool,
+          transmit: :spectrum_texture,
+          uroughness: :float_texture,
+          vroughness: :float_texture,
+
+          # eta appears as both a float_texture and spectrum_texture
+          eta: :texture,
+      }.freeze
     end
   end
 end

@@ -9,6 +9,7 @@ module PBRT
         write Statement.variadic("Shape", "cone", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           radius: :float,
           height: :float,
           phimax: :float,
@@ -19,6 +20,7 @@ module PBRT
         write Statement.variadic("Shape", "curve", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           P: :point3,
           basis: :string,
           degree: :integer,
@@ -35,6 +37,7 @@ module PBRT
         write Statement.variadic("Shape", "cylinder", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           radius: :float,
           zmin: :float,
           zmax: :float,
@@ -46,6 +49,7 @@ module PBRT
         write Statement.variadic("Shape", "disk", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           height: :float,
           radius: :float,
           innerradius: :float,
@@ -57,6 +61,7 @@ module PBRT
         write Statement.variadic("Shape", "hyperboloid", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           p1: :point3,
           p2: :point3,
           phimax: :float,
@@ -67,6 +72,7 @@ module PBRT
         write Statement.variadic("Shape", "paraboloid", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           radius: :float,
           zmin: :float,
           zmax: :float,
@@ -78,6 +84,7 @@ module PBRT
         write Statement.variadic("Shape", "sphere", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           radius: :float,
           zmin: :float,
           zmax: :float,
@@ -89,6 +96,7 @@ module PBRT
         write Statement.variadic("Shape", "trianglemesh", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           indices: :integer,
           P: :point3,
           N: :normal3,
@@ -104,6 +112,7 @@ module PBRT
         write Statement.variadic("Shape", "heightfield", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           nu: :integer,
           nv: :integer,
           Pz: :float,
@@ -114,6 +123,7 @@ module PBRT
         write Statement.variadic("Shape", "loopsubdiv", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           levels: :integer,
           indices: :integer,
           P: :point3,
@@ -124,6 +134,7 @@ module PBRT
         write Statement.variadic("Shape", "nurbs", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           nu: :integer,
           nv: :integer,
           uorder: :integer,
@@ -143,6 +154,7 @@ module PBRT
         write Statement.variadic("Shape", "plymesh", ParameterList.from(
           params,
 
+          allow_material_overrides: true,
           filename: :string,
           alpha: :float_texture,
           shadowalpha: :float_texture,

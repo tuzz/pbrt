@@ -78,6 +78,13 @@ module PBRT
             .to raise_error(AmbiguousArgumentError)
         end
       end
+
+      context "when 'allow_material_overrides' is set" do
+        it "allows material parameters to be set" do
+          subject = described_class.from({ sheen: 1 }, allow_material_overrides: true)
+          expect(subject.to_s).to eq('"float sheen" [1]')
+        end
+      end
     end
 
     describe "#to_s" do

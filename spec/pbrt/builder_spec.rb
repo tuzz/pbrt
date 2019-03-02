@@ -788,6 +788,13 @@ RSpec.describe PBRT::Builder do
   describe "materials" do
     # See: https://pbrt.org/fileformat-v3.html#materials
 
+    it "allows shapes to override material parameters" do
+      check(
+        subject.shape.sphere(radius: 1, sheen: 1),
+        'Shape "sphere" "float radius" [1] "float sheen" [1]'
+      )
+    end
+
     specify { check(subject.named_material("foo"), 'NamedMaterial "foo"') }
 
     describe "#make_named_material" do
@@ -1346,7 +1353,7 @@ RSpec.describe PBRT::Builder do
     specify do
       check(
         subject.texture("name").spectrum.windy,
-        'Texture "name" "spectrum" "windy" ',
+        'Texture "name" "spectrum" "windy"',
       )
     end
 

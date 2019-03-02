@@ -1,6 +1,8 @@
 module PBRT
   class ParameterList
     def self.from(params, type_signature)
+      allow_shapes_to_override_materials!(params, type_signature)
+
       Signature.new(type_signature).check(params)
 
       pairs = params.map do |name, value|
@@ -26,6 +28,18 @@ module PBRT
       @name_value_pairs.map do |parameter, values|
         [parameter.to_s, "[#{values}]"].join(" ")
       end.join(" ")
+    end
+
+    def self.allow_shapes_to_override_materials!(params, type_signature)
+      return unless type_signature[:allow_material_overrides]
+      type_signature.delete(:allow_material_overrides)
+
+      surplus = params.keys - type_signature.keys
+
+      surplus.each do |key|
+        type = Builder::Material::ALL_PARAMS[key]
+        type_signature[key] = type if type
+      end
     end
   end
 end
