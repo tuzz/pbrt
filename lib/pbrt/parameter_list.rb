@@ -1,7 +1,7 @@
 module PBRT
   class ParameterList
     def self.from(params, type_signature)
-      Signature.new(*type_signature.keys).check(params)
+      Signature.new(type_signature).check(params)
 
       pairs = params.map do |name, value|
         type = type_signature[name]

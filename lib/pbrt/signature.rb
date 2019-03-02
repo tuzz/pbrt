@@ -1,11 +1,32 @@
 module PBRT
   class Signature
-    def initialize(*parameter_names)
-      @parameter_names = parameter_names
+    TYPES = %i(
+      integer float point2 vector2 point3
+      vector3 normal3 spectrum bool string
+    )
+
+    def initialize(names_and_types)
+      @names_and_types = names_and_types
+
+      check_for_known_types
     end
 
     def check(params)
-      surplus = params.keys - @parameter_names
+      check_for_surplus(params)
+    end
+
+    private
+
+    def check_for_known_types
+      unknown = @names_and_types.values - TYPES
+
+      if unknown.any?
+        raise ArgumentError, "unknown types: #{unknown.join(", ")}"
+      end
+    end
+
+    def check_for_surplus(params)
+      surplus = params.keys - @names_and_types.keys
 
       if surplus.size == 1
         raise ArgumentError, "(unknown keyword: #{surplus.first})"
