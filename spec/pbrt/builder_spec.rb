@@ -363,6 +363,224 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "shapes" do
+    # See: https://pbrt.org/fileformat-v3.html#shapes
+
+    specify do
+      check(
+        subject.shape.cone(
+          radius: 1,
+          height: 2,
+          phimax: 3,
+        ), [
+          'Shape "cone"',
+          '"float radius" [1]',
+          '"float height" [2]',
+          '"float phimax" [3]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.curve(
+          P: [1] * 12,
+          basis: ["foo"],
+          degree: 2,
+          type: ["bar"],
+          N: [3] * 6,
+          width: 4,
+          width0: 5,
+          width1: 6,
+          splitdepth: 7,
+        ), [
+          'Shape "curve"',
+          '"point3 P" [1 1 1 1 1 1 1 1 1 1 1 1]',
+          '"string basis" ["foo"]',
+          '"integer degree" [2]',
+          '"string type" ["bar"]',
+          '"normal3 N" [3 3 3 3 3 3]',
+          '"float width" [4]',
+          '"float width0" [5]',
+          '"float width1" [6]',
+          '"integer splitdepth" [7]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.cylinder(
+          radius: 1,
+          zmin: 2,
+          zmax: 3,
+          phimax: 4,
+        ), [
+          'Shape "cylinder"',
+          '"float radius" [1]',
+          '"float zmin" [2]',
+          '"float zmax" [3]',
+          '"float phimax" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.disk(
+          height: 1,
+          radius: 2,
+          innerradius: 3,
+          phimax: 4,
+        ), [
+          'Shape "disk"',
+          '"float height" [1]',
+          '"float radius" [2]',
+          '"float innerradius" [3]',
+          '"float phimax" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.hyperboloid(
+          p1: [1, 2, 3],
+          p2: [4, 5, 6],
+          phimax: 7,
+        ), [
+          'Shape "hyperboloid"',
+          '"point3 p1" [1 2 3]',
+          '"point3 p2" [4 5 6]',
+          '"float phimax" [7]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.paraboloid(
+          radius: 1,
+          zmin: 2,
+          zmax: 3,
+          phimax: 4,
+        ), [
+          'Shape "paraboloid"',
+          '"float radius" [1]',
+          '"float zmin" [2]',
+          '"float zmax" [3]',
+          '"float phimax" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.sphere(
+          radius: 1,
+          zmin: 2,
+          zmax: 3,
+          phimax: 4,
+        ), [
+          'Shape "sphere"',
+          '"float radius" [1]',
+          '"float zmin" [2]',
+          '"float zmax" [3]',
+          '"float phimax" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.trianglemesh(
+          indices: [1, 2, 3],
+          P: [4, 5, 6],
+          N: [7, 8, 9],
+          S: [10, 11, 12],
+          uv: [13, 14],
+          alpha: 15,          # TODO: What are float textures?
+          shadowalpha: 16,
+        ), [
+          'Shape "trianglemesh"',
+          '"integer indices" [1 2 3]',
+          '"point3 P" [4 5 6]',
+          '"normal3 N" [7 8 9]',
+          '"vector3 S" [10 11 12]',
+          '"float uv" [13 14]',
+          '"float alpha" [15]',
+          '"float shadowalpha" [16]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.heightfield(
+          nu: 1,
+          nv: 2,
+          Pz: [3, 3],
+        ), [
+          'Shape "heightfield"',
+          '"integer nu" [1]',
+          '"integer nv" [2]',
+          '"float Pz" [3 3]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.loopsubdiv(
+          levels: 1,
+          indices: 2,
+          P: [3, 4, 5],
+        ), [
+          'Shape "loopsubdiv"',
+          '"integer levels" [1]',
+          '"integer indices" [2]',
+          '"point3 P" [3 4 5]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.nurbs(
+          nu: 1,
+          nv: 2,
+          uorder: 3,
+          vorder: 4,
+          uknots: [5, 6],
+          vknots: [7, 8],
+          u0: 9,
+          v0: 10,
+          u1: 11,
+          v1: 12,
+          P: [13, 14],
+          Pw: [15, 16],
+        ), [
+          'Shape "nurbs"',
+          '"integer nu" [1]',
+          '"integer nv" [2]',
+          '"integer uorder" [3]',
+          '"integer vorder" [4]',
+          '"float uknots" [5 6]',
+          '"float vknots" [7 8]',
+          '"float u0" [9]',
+          '"float v0" [10]',
+          '"float u1" [11]',
+          '"float v1" [12]',
+          '"point3 P" [13 14]',
+          '"float Pw" [15 16]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.shape.plymesh(
+          filename: "foo",
+          alpha: 1,
+          shadowalpha: 2,
+        ), [
+          'Shape "plymesh"',
+          '"string filename" ["foo"]',
+          '"float alpha" [1]',
+          '"float shadowalpha" [2]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new
