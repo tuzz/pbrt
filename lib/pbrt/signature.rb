@@ -3,6 +3,7 @@ module PBRT
     TYPES = %i(
       integer float point2 vector2 point3
       vector3 normal3 spectrum bool string
+      texture float_texture spectrum_texture
     )
 
     def initialize(names_and_types)

@@ -94,8 +94,8 @@ module PBRT
           N: :normal3,
           S: :vector3,
           uv: :float,
-          alpha: :float,
-          shadowalpha: :float,
+          alpha: :float_texture,
+          shadowalpha: :float_texture,
         ))
       end
 
@@ -143,8 +143,8 @@ module PBRT
           params,
 
           filename: :string,
-          alpha: :float,
-          shadowalpha: :float,
+          alpha: :float_texture,
+          shadowalpha: :float_texture,
         ))
       end
 

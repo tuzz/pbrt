@@ -559,8 +559,8 @@ RSpec.describe PBRT::Builder do
           N: [7, 8, 9],
           S: [10, 11, 12],
           uv: [13, 14],
-          alpha: 15,          # TODO: What are float textures?
-          shadowalpha: 16,
+          alpha: 15,
+          shadowalpha: "foo",
         ), [
           'Shape "trianglemesh"',
           '"integer indices" [1 2 3]',
@@ -569,7 +569,7 @@ RSpec.describe PBRT::Builder do
           '"vector3 S" [10 11 12]',
           '"float uv" [13 14]',
           '"float alpha" [15]',
-          '"float shadowalpha" [16]',
+          '"texture shadowalpha" ["foo"]',
         ])
     end
 
@@ -637,13 +637,13 @@ RSpec.describe PBRT::Builder do
       check(
         subject.shape.plymesh(
           filename: "foo",
-          alpha: 1,
-          shadowalpha: 2,
+          alpha: "bar",
+          shadowalpha: 1,
         ), [
           'Shape "plymesh"',
           '"string filename" ["foo"]',
-          '"float alpha" [1]',
-          '"float shadowalpha" [2]',
+          '"texture alpha" ["bar"]',
+          '"float shadowalpha" [1]',
         ])
     end
   end
