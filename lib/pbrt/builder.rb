@@ -92,6 +92,22 @@ module PBRT
       write Statement.fixed_size("ActiveTransform", 1, args)
     end
 
+    def reverse_orientation(*args)
+      write Statement.fixed_size("ReverseOrientation", 0)
+    end
+
+    def attribute_begin(&block)
+      write Statement.fixed_size("AttributeBegin", 0)
+      instance_eval &block
+      write Statement.fixed_size("AttributeEnd", 0)
+    end
+
+    def transform_begin(&block)
+      write Statement.fixed_size("TransformBegin", 0)
+      instance_eval &block
+      write Statement.fixed_size("TransformEnd", 0)
+    end
+
     def write(statement)
       io.puts statement
       self

@@ -6,7 +6,7 @@ RSpec.describe PBRT::Builder do
   describe "transformations" do
     # See: https://pbrt.org/fileformat-v3.html#transformations
 
-    specify { check(subject.identity.to_s, "Identity") }
+    specify { check(subject.identity, "Identity") }
     specify { check(subject.translate(1, 2, 3), "Translate 1 2 3") }
     specify { check(subject.scale(1, 2, 3), "Scale 1 2 3") }
     specify { check(subject.rotate(1, 2, 3, 4), "Rotate 1 2 3 4") }
@@ -361,6 +361,28 @@ RSpec.describe PBRT::Builder do
           '"integer maxdepth" [5]',
         ])
     end
+  end
+
+  describe "attributes" do
+    # See: https://pbrt.org/fileformat-v3.html#attributes
+
+    specify do
+      check(subject.attribute_begin { translate(1, 2, 3) }, <<~PBRT.strip)
+        AttributeBegin
+        Translate 1 2 3
+        AttributeEnd
+      PBRT
+    end
+
+    specify do
+      check(subject.transform_begin { translate(1, 2, 3) }, <<~PBRT.strip)
+        TransformBegin
+        Translate 1 2 3
+        TransformEnd
+      PBRT
+    end
+
+    specify { check(subject.reverse_orientation, "ReverseOrientation") }
   end
 
   describe "shapes" do
