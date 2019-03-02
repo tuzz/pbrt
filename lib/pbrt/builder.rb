@@ -40,6 +40,10 @@ module PBRT
       Shape.new(self)
     end
 
+    def light_source
+      LightSource.new(self)
+    end
+
     def identity
       write Statement.fixed_size("Identity", 0)
     end

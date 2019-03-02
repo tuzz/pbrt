@@ -581,6 +581,106 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "lights" do
+    # See: https://pbrt.org/fileformat-v3.html#lights
+
+    specify do
+      check(
+        subject.light_source.distant(
+          scale: [1, 1, 1],    # TODO: add a spectrum type
+          L: [2, 2, 2],
+          from: [3, 3, 3],
+          to: [4, 4, 4],
+        ), [
+          'LightSource "distant"',
+          '"spectrum scale" [1 1 1]',
+          '"spectrum L" [2 2 2]',
+          '"point3 from" [3 3 3]',
+          '"point3 to" [4 4 4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.light_source.goniometric(
+          scale: [1, 1, 1],
+          I: [2, 2, 2],
+          mapname: "foo",
+        ), [
+          'LightSource "goniometric"',
+          '"spectrum scale" [1 1 1]',
+          '"spectrum I" [2 2 2]',
+          '"string mapname" ["foo"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.light_source.infinite(
+          scale: [1, 1, 1],
+          L: [2, 2, 2],
+          samples: 3,
+          mapname: "foo",
+        ), [
+          'LightSource "infinite"',
+          '"spectrum scale" [1 1 1]',
+          '"spectrum L" [2 2 2]',
+          '"integer samples" [3]',
+          '"string mapname" ["foo"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.light_source.point(
+          scale: [1, 1, 1],
+          I: [2, 2, 2],
+          from: [3, 3, 3],
+        ), [
+          'LightSource "point"',
+          '"spectrum scale" [1 1 1]',
+          '"spectrum I" [2 2 2]',
+          '"point3 from" [3 3 3]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.light_source.projection(
+          scale: [1, 1, 1],
+          I: [2, 2, 2],
+          fov: 3,
+          mapname: "foo",
+        ), [
+          'LightSource "projection"',
+          '"spectrum scale" [1 1 1]',
+          '"spectrum I" [2 2 2]',
+          '"float fov" [3]',
+          '"string mapname" ["foo"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.light_source.spot(
+          scale: [1, 1, 1],
+          I: [2, 2, 2],
+          from: [3, 3, 3],
+          to: [4, 4, 4],
+          coneangle: 5,
+          conedeltaangle: 6,
+        ), [
+          'LightSource "spot"',
+          '"spectrum scale" [1 1 1]',
+          '"spectrum I" [2 2 2]',
+          '"point3 from" [3 3 3]',
+          '"point3 to" [4 4 4]',
+          '"float coneangle" [5]',
+          '"float conedeltaangle" [6]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new
