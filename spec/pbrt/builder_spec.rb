@@ -561,6 +561,10 @@ RSpec.describe PBRT::Builder do
           uv: [13, 14],
           alpha: 15,
           shadowalpha: "foo",
+
+          # The 'st' param isn't documented, but the 'Example of a pbrt file' uses it.
+          st: [1, 1],
+
         ), [
           'Shape "trianglemesh"',
           '"integer indices" [1 2 3]',
@@ -570,6 +574,7 @@ RSpec.describe PBRT::Builder do
           '"float uv" [13 14]',
           '"float alpha" [15]',
           '"texture shadowalpha" ["foo"]',
+          '"float st" [1 1]',
         ])
     end
 

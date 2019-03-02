@@ -96,6 +96,7 @@ module PBRT
           uv: :float,
           alpha: :float_texture,
           shadowalpha: :float_texture,
+          st: :float,
         ))
       end
 
