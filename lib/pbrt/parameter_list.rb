@@ -5,6 +5,8 @@ module PBRT
 
       pairs = params.map do |name, value|
         type = type_signature[name]
+
+        type, value = Texture.unpack(type, value)
         type, value = Spectrum.unpack(value) if type == :spectrum
 
         [Parameter.new(type, name), Values.new(value)]

@@ -7,6 +7,7 @@ module PBRT
     end
 
     def self.unpack(type, value)
+      return [type, value] unless type.to_s.include?("texture")
       return [:texture, value.args] if value.is_a?(self)
 
       if type == :float_texture
