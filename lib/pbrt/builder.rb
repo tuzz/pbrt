@@ -44,6 +44,10 @@ module PBRT
       LightSource.new(self)
     end
 
+    def area_light_source
+      AreaLightSource.new(self)
+    end
+
     def identity
       write Statement.fixed_size("Identity", 0)
     end

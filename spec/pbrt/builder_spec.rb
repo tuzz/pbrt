@@ -681,6 +681,24 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "area lights" do
+    # See: https://pbrt.org/fileformat-v3.html#area-lights
+
+    specify do
+      check(
+        subject.area_light_source.diffuse(
+          L: [1, 1, 1],
+          twosided: true,
+          samples: 2,
+        ), [
+          'AreaLightSource "diffuse"',
+          '"spectrum L" [1 1 1]',
+          '"bool twosided" ["true"]',
+          '"integer samples" [2]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new
