@@ -1358,6 +1358,67 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "participating media" do
+    # See: https://pbrt.org/fileformat-v3.html#media-world
+
+    specify do
+      check(
+        subject.make_named_medium("mymedium").homogeneous(
+            sigma_a: subject.rgb(1, 1, 1),
+            sigma_s: subject.xyz(2, 2, 2),
+            preset: "foo",
+            g: 3,
+            scale: 4,
+        ), [
+          'MakeNamedMedium "mymedium"',
+          '"string type" "homogeneous"',
+          '"rgb sigma_a" [1 1 1]',
+          '"xyz sigma_s" [2 2 2]',
+          '"string preset" ["foo"]',
+          '"float g" [3]',
+          '"float scale" [4]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.make_named_medium("mymedium").heterogeneous(
+            sigma_a: subject.rgb(1, 1, 1),
+            sigma_s: subject.xyz(2, 2, 2),
+            preset: "foo",
+            g: 3,
+            scale: 4,
+            p0: [5, 5, 5],
+            p1: [6, 6, 6],
+            nx: 7,
+            ny: 8,
+            nz: 9,
+            density: 10,
+        ), [
+          'MakeNamedMedium "mymedium"',
+          '"string type" "heterogeneous"',
+          '"rgb sigma_a" [1 1 1]',
+          '"xyz sigma_s" [2 2 2]',
+          '"string preset" ["foo"]',
+          '"float g" [3]',
+          '"float scale" [4]',
+          '"point3 p0" [5 5 5]',
+          '"point3 p1" [6 6 6]',
+          '"integer nx" [7]',
+          '"integer ny" [8]',
+          '"integer nz" [9]',
+          '"float density" [10]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.medium_interface("", "mymedium"),
+        'MediumInterface "" "mymedium"',
+      )
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new

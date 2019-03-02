@@ -56,6 +56,14 @@ module PBRT
       NamedMaterial.new(self, name)
     end
 
+    def make_named_medium(name)
+      NamedMedium.new(self, name)
+    end
+
+    def medium_interface(*args)
+      write Statement.fixed_size("MediumInterface", 2, args)
+    end
+
     def identity
       write Statement.fixed_size("Identity", 0)
     end
