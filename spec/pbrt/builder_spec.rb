@@ -780,6 +780,375 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "materials" do
+    # See: https://pbrt.org/fileformat-v3.html#materials
+
+    specify { check(subject.named_material("foo"), 'NamedMaterial "foo"') }
+
+    describe "#make_named_material" do
+      it "uses the referenced material to determine the types" do
+        check(
+          subject.make_named_material(
+            name: "myplastic",
+            type: "plastic",
+            bumpmap: "foo",
+            Kd: subject.rgb(1, 1, 1),
+            Ks: subject.sampled(2, 2, 2),
+            roughness: 3,
+            remaproughness: true,
+          ), [
+            'MakeNamedMaterial "myplastic"',
+            '"string type" "plastic"',
+            '"texture bumpmap" ["foo"]',
+            '"rgb Kd" [1 1 1]',
+            '"spectrum Ks" [2 2 2]',
+            '"float roughness" [3]',
+            '"bool remaproughness" ["true"]',
+          ])
+      end
+
+      it "raises an error if a parameter isn't known" do
+        expect {
+          subject.make_named_material(
+            name: "myplastic",
+            type: "plastic",
+            unknown: "foo",
+          )
+        }.to raise_error(ArgumentError, /unknown/)
+      end
+
+      it "raises an error if the material isn't known" do
+        expect {
+          subject.make_named_material(
+            name: "myplastic",
+            type: "copper",
+            unknown: "foo",
+          )
+        }.to raise_error(NoMethodError, /copper/)
+      end
+    end
+
+    specify do
+      check(
+        subject.material.disney(
+          bumpmap: "foo",
+          color: subject.rgb(1, 1, 1),
+          anisotropic: 2,
+          clearcoat: "bar",
+          clearcoatgloss: 3,
+          eta: 4,
+          metallic: 5,
+          roughness: 6,
+          scatterdistance: subject.texture("baz"),
+          sheen: 7,
+          sheentint: 8,
+          spectrans: 9,
+          speculartint: 10,
+          thin: true,
+          difftrans: subject.xyz(1, 2, 3),
+          flatness: subject.texture("qux"),
+        ), [
+          'Material "disney"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb color" [1 1 1]',
+          '"float anisotropic" [2]',
+          '"texture clearcoat" ["bar"]',
+          '"float clearcoatgloss" [3]',
+          '"float eta" [4]',
+          '"float metallic" [5]',
+          '"float roughness" [6]',
+          '"texture scatterdistance" ["baz"]',
+          '"float sheen" [7]',
+          '"float sheentint" [8]',
+          '"float spectrans" [9]',
+          '"float speculartint" [10]',
+          '"bool thin" ["true"]',
+          '"xyz difftrans" [1 2 3]',
+          '"texture flatness" ["qux"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.fourier(
+          bumpmap: "foo",
+          bsdffile: "bar",
+        ), [
+          'Material "fourier"',
+          '"texture bumpmap" ["foo"]',
+          '"string bsdffile" ["bar"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.glass(
+          bumpmap: "foo",
+          Kr: subject.texture("bar"),
+          Kt: subject.rgb(2, 2, 2),
+          eta: 3,
+          uroughness: "baz",
+          vroughness: 4,
+          remaproughness: true,
+        ), [
+          'Material "glass"',
+          '"texture bumpmap" ["foo"]',
+          '"texture Kr" ["bar"]',
+          '"rgb Kt" [2 2 2]',
+          '"float eta" [3]',
+          '"texture uroughness" ["baz"]',
+          '"float vroughness" [4]',
+          '"bool remaproughness" ["true"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.hair(
+          bumpmap: "foo",
+          sigma_a: subject.rgb(1, 1, 1),
+          color: subject.texture("bar"),
+          eumelanin: 2,
+          pheomelanin: "baz",
+          eta: 3,
+          beta_m: 4,
+          beta_n: 5,
+          alpha: 6,
+        ), [
+          'Material "hair"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb sigma_a" [1 1 1]',
+          '"texture color" ["bar"]',
+          '"float eumelanin" [2]',
+          '"texture pheomelanin" ["baz"]',
+          '"float eta" [3]',
+          '"float beta_m" [4]',
+          '"float beta_n" [5]',
+          '"float alpha" [6]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.kdsubsurface(
+          bumpmap: "foo",
+          Kd: subject.rgb(1, 1, 1),
+          mfp: 2,
+          eta: 3,
+          Kr: subject.texture("bar"),
+          Kt: subject.xyz(4, 4, 4),
+          uroughness: 5,
+          vroughness: "baz",
+          remaproughness: true,
+        ), [
+          'Material "kdsubsurface"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb Kd" [1 1 1]',
+          '"float mfp" [2]',
+          '"float eta" [3]',
+          '"texture Kr" ["bar"]',
+          '"xyz Kt" [4 4 4]',
+          '"float uroughness" [5]',
+          '"texture vroughness" ["baz"]',
+          '"bool remaproughness" ["true"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.matte(
+          bumpmap: "foo",
+          Kd: subject.rgb(1, 1, 1),
+          sigma: "bar",
+        ), [
+          'Material "matte"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb Kd" [1 1 1]',
+          '"texture sigma" ["bar"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.metal(
+          bumpmap: "foo",
+          eta: subject.rgb(1, 1, 1),
+          k: subject.blackbody(5000, 1),
+          roughness: 2,
+          uroughness: 3,
+          vroughness: 4,
+          remaproughness: true,
+        ), [
+          'Material "metal"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb eta" [1 1 1]',
+          '"blackbody k" [5000 1]',
+          '"float roughness" [2]',
+          '"float uroughness" [3]',
+          '"float vroughness" [4]',
+          '"bool remaproughness" ["true"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.mirror(
+          bumpmap: "foo",
+          Kr: subject.texture("bar"),
+        ), [
+          'Material "mirror"',
+          '"texture bumpmap" ["foo"]',
+          '"texture Kr" ["bar"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.mix(
+          bumpmap: "foo",
+          amount: subject.rgb(1, 1, 1),
+          namedmaterial1: "bar",
+          namedmaterial2: "baz",
+        ), [
+          'Material "mix"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb amount" [1 1 1]',
+          '"string namedmaterial1" ["bar"]',
+          '"string namedmaterial2" ["baz"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.none(
+          bumpmap: "foo",
+        ), [
+          'Material "none"',
+          '"texture bumpmap" ["foo"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.plastic(
+          bumpmap: "foo",
+          Kd: subject.rgb(1, 1, 1),
+          Ks: subject.sampled(2, 2, 2),
+          roughness: 3,
+          remaproughness: true,
+        ), [
+          'Material "plastic"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb Kd" [1 1 1]',
+          '"spectrum Ks" [2 2 2]',
+          '"float roughness" [3]',
+          '"bool remaproughness" ["true"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.substrate(
+          bumpmap: "foo",
+          Kd: subject.rgb(1, 1, 1),
+          Ks: subject.sampled(2, 2, 2),
+          uroughness: 3,
+          vroughness: "bar",
+          remaproughness: true,
+        ), [
+          'Material "substrate"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb Kd" [1 1 1]',
+          '"spectrum Ks" [2 2 2]',
+          '"float uroughness" [3]',
+          '"texture vroughness" ["bar"]',
+          '"bool remaproughness" ["true"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.subsurface(
+          bumpmap: "foo",
+          name: "bar",
+          sigma_a: subject.rgb(1, 1, 1),
+          sigma_prime_s: subject.xyz(2, 2, 2),
+          scale: 3,
+          eta: 4,
+          Kr: subject.texture("baz"),
+          Kt: subject.blackbody(5000, 1),
+          uroughness: 6,
+          vroughness: 7,
+          remaproughness: false,
+        ), [
+          'Material "subsurface"',
+          '"texture bumpmap" ["foo"]',
+          '"string name" ["bar"]',
+          '"rgb sigma_a" [1 1 1]',
+          '"xyz sigma_prime_s" [2 2 2]',
+          '"float scale" [3]',
+          '"float eta" [4]',
+          '"texture Kr" ["baz"]',
+          '"blackbody Kt" [5000 1]',
+          '"float uroughness" [6]',
+          '"float vroughness" [7]',
+          '"bool remaproughness" ["false"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.translucent(
+          bumpmap: "foo",
+          Kd: subject.texture("bar"),
+          Ks: subject.rgb(1, 1, 1),
+          reflect: subject.sampled(2, 2, 2),
+          transmit: subject.texture("baz"),
+          roughness: 3,
+          remaproughness: true,
+        ), [
+          'Material "translucent"',
+          '"texture bumpmap" ["foo"]',
+          '"texture Kd" ["bar"]',
+          '"rgb Ks" [1 1 1]',
+          '"spectrum reflect" [2 2 2]',
+          '"texture transmit" ["baz"]',
+          '"float roughness" [3]',
+          '"bool remaproughness" ["true"]',
+        ])
+    end
+
+    specify do
+      check(
+        subject.material.uber(
+          bumpmap: "foo",
+          Kd: subject.rgb(1, 1, 1),
+          Ks: subject.xyz(2, 2, 2),
+          Kr: subject.texture("bar"),
+          Kt: subject.blackbody(3000, 1),
+          roughness: 4,
+          uroughness: 5,
+          vroughness: "baz",
+          eta: 6,
+          opacity: subject.sampled(7, 7, 7),
+          remaproughness: false,
+        ), [
+          'Material "uber"',
+          '"texture bumpmap" ["foo"]',
+          '"rgb Kd" [1 1 1]',
+          '"xyz Ks" [2 2 2]',
+          '"texture Kr" ["bar"]',
+          '"blackbody Kt" [3000 1]',
+          '"float roughness" [4]',
+          '"float uroughness" [5]',
+          '"texture vroughness" ["baz"]',
+          '"float eta" [6]',
+          '"spectrum opacity" [7 7 7]',
+          '"bool remaproughness" ["false"]',
+        ])
+    end
+  end
+
   describe "ways to build" do
     it "can build by explicit method calls" do
       subject = described_class.new

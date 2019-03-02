@@ -48,6 +48,10 @@ module PBRT
       AreaLightSource.new(self)
     end
 
+    def material
+      Material.new(self)
+    end
+
     def identity
       write Statement.fixed_size("Identity", 0)
     end
@@ -132,6 +136,15 @@ module PBRT
       write Statement.fixed_size("Include", 1, args)
     end
 
+    def named_material(args)
+      write Statement.fixed_size("NamedMaterial", 1, args)
+    end
+
+    def make_named_material(name:, type:, **params)
+      string = material.public_send(type, **params).to_s
+      string.sub("Material", %(MakeNamedMaterial "#{name}" "string type"))
+    end
+
     def rgb(*args)
       Spectrum.new(:rgb, *args)
     end
@@ -150,6 +163,10 @@ module PBRT
 
     def blackbody(*args)
       Spectrum.new(:blackbody, *args)
+    end
+
+    def texture(*args)
+      Texture.new(*args)
     end
 
     def write(statement)

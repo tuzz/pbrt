@@ -17,7 +17,7 @@ module PBRT
       return if value.is_a?(self)
 
       message = "Please specify the spectrum representation for #{value.inspect}.\n"
-      message += "You can do this wrapping the value: rgb(#{value.inspect})\n"
+      message += "You can do this by wrapping the value: rgb(#{value.inspect})\n"
       message += "Valid representations are: rgb, xyz, sampled and blackbody"
 
       raise AmbiguousSpectrumError, message
