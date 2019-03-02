@@ -786,11 +786,9 @@ RSpec.describe PBRT::Builder do
     specify { check(subject.named_material("foo"), 'NamedMaterial "foo"') }
 
     describe "#make_named_material" do
-      it "uses the referenced material to determine the types" do
+      it "proxies through to the material builder" do
         check(
-          subject.make_named_material(
-            name: "myplastic",
-            type: "plastic",
+          subject.make_named_material("myplastic").plastic(
             bumpmap: "foo",
             Kd: subject.rgb(1, 1, 1),
             Ks: subject.sampled(2, 2, 2),
@@ -805,26 +803,6 @@ RSpec.describe PBRT::Builder do
             '"float roughness" [3]',
             '"bool remaproughness" ["true"]',
           ])
-      end
-
-      it "raises an error if a parameter isn't known" do
-        expect {
-          subject.make_named_material(
-            name: "myplastic",
-            type: "plastic",
-            unknown: "foo",
-          )
-        }.to raise_error(ArgumentError, /unknown/)
-      end
-
-      it "raises an error if the material isn't known" do
-        expect {
-          subject.make_named_material(
-            name: "myplastic",
-            type: "copper",
-            unknown: "foo",
-          )
-        }.to raise_error(NoMethodError, /copper/)
       end
     end
 

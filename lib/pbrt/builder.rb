@@ -52,6 +52,10 @@ module PBRT
       Material.new(self)
     end
 
+    def make_named_material(name)
+      NamedMaterial.new(self, name)
+    end
+
     def identity
       write Statement.fixed_size("Identity", 0)
     end
@@ -138,11 +142,6 @@ module PBRT
 
     def named_material(args)
       write Statement.fixed_size("NamedMaterial", 1, args)
-    end
-
-    def make_named_material(name:, type:, **params)
-      string = material.public_send(type, **params).to_s
-      string.sub("Material", %(MakeNamedMaterial "#{name}" "string type"))
     end
 
     def rgb(*args)
