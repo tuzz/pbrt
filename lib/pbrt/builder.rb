@@ -114,6 +114,16 @@ module PBRT
       write Statement.fixed_size("TransformEnd", 0)
     end
 
+    def object_begin(*args, &block)
+      write Statement.fixed_size("ObjectBegin", 1, *args)
+      instance_eval &block
+      write Statement.fixed_size("ObjectEnd", 0)
+    end
+
+    def object_instance(*args)
+      write Statement.fixed_size("ObjectInstance", 1, *args)
+    end
+
     def comment(string)
       string.split("\n").map { |s| "# #{s}\n" }.join
     end

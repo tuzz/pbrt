@@ -648,6 +648,20 @@ RSpec.describe PBRT::Builder do
     end
   end
 
+  describe "object instancing" do
+    # See: https://pbrt.org/fileformat-v3.html#object-instancing
+
+    specify do
+      check(subject.object_begin("name") { translate(1, 2, 3) }, <<~PBRT.strip)
+        ObjectBegin "name"
+        Translate 1 2 3
+        ObjectEnd
+      PBRT
+    end
+
+    specify { check(subject.object_instance("name"), 'ObjectInstance "name"') }
+  end
+
   describe "lights" do
     # See: https://pbrt.org/fileformat-v3.html#lights
 
